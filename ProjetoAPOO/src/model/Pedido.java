@@ -5,33 +5,16 @@ import java.util.List;
 
 public class Pedido {
     private Cliente cliente;
-    private List<ItemPedido> itens;
-    private double valorFrete;
-    private double valorTotalPedido;
+    private List<ItemPedido> itens = new ArrayList<>();
+    private double frete = 0.0;
+    private double totalComFrete = 0.0;
 
     public Pedido(Cliente cliente) {
         this.cliente = cliente;
-        this.itens = new ArrayList<>();
     }
 
-    public void adicionarItem(ItemPedido item) {
-        this.itens.add(item);
-    }
-
-    public double calcularTotalProdutos() {
-        double total = 0.0;
-        for (ItemPedido item : itens) {
-            total += item.getSubtotal();
-        }
-        return total;
-    }
-
-    public double calcularPesoTotal() {
-        double pesoTotal = 0.0;
-        for (ItemPedido item : itens) {
-            pesoTotal += item.getPesoTotal();
-        }
-        return pesoTotal;
+    public void adicionarItem(Produto produto, int quantidade) {
+        itens.add(new ItemPedido(produto, quantidade));
     }
 
     public Cliente getCliente() {
@@ -42,15 +25,24 @@ public class Pedido {
         return itens;
     }
 
-    public double getValorFrete() {
-        return valorFrete;
+    public double calcularTotalProdutos() {
+        double total = 0;
+        for (ItemPedido item : itens) {
+            total += item.getSubtotal();
+        }
+        return total;
     }
 
-    public void setValorFrete(double valorFrete) {
-        this.valorFrete = valorFrete;
+    public double getFrete() {
+        return frete;
     }
 
-    public double getValorTotalPedido() {
-        return calcularTotalProdutos() + this.valorFrete;
+    public void setFrete(double frete) {
+        this.frete = frete;
+        this.totalComFrete = calcularTotalProdutos() + frete;
+    }
+
+    public double getTotalComFrete() {
+        return totalComFrete;
     }
 }

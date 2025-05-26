@@ -1,7 +1,5 @@
 package servico;
 
-import model.Pedido;
-
 public class NotificadorWhatsApp {
 
     public void enviarNotificacao(Pedido pedido) {

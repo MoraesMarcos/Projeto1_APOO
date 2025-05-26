@@ -1,7 +1,5 @@
 package servico;
 
-import model.Pedido;
-
 public class NotificadorEmail {
 
     public void enviarNotificacao(Pedido pedido) {

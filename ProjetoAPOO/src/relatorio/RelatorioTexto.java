@@ -1,6 +1,5 @@
 package relatorio;
 
-import model.Pedido;
 import model.ItemPedido;
 
 public class RelatorioTexto {
