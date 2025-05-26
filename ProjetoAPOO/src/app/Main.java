@@ -133,10 +133,12 @@ public class Main {
         } else if (freteOp == 2) {
             double distancia = Entrada.lerDouble("Informe a distância em km: ");
             FreteCalculadoraDistancia calcDist = new FreteCalculadoraDistancia();
-            frete = calcDist.calcular(pedido, distancia);
+            frete = calcDist.calcular(distancia);
         } else {
             System.out.println("Opção inválida para frete. Frete definido como zero.");
         }
+
+
 
         pedido.setFrete(frete);
         pedidos.add(pedido);

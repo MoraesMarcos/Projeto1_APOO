@@ -33,6 +33,14 @@ public class Pedido {
         return total;
     }
 
+    public double calcularPesoTotal() {
+        double pesoTotal = 0.0;
+        for (ItemPedido item : itens) {
+            pesoTotal += item.getProduto().getPeso() * item.getQuantidade();
+        }
+        return pesoTotal;
+    }
+
     public double getFrete() {
         return frete;
     }

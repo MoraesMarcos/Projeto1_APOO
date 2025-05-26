@@ -1,9 +1,9 @@
 package servico;
 
-public class NotificadorSMS {
+import model.Cliente;
 
-    public void enviarNotificacao(Pedido pedido) {
-        String cpfCliente = pedido.getCliente().getCpf(); // Usando CPF como proxy para o número
-        System.out.println("Enviando SMS para o número associado ao CPF " + cpfCliente + ": Seu pedido foi confirmado!");
+public class NotificadorSMS {
+    public void notificar(Cliente cliente) {
+        System.out.println("Enviando SMS para " + cliente.getCpf() + ": Seu pedido foi confirmado!");
     }
 }

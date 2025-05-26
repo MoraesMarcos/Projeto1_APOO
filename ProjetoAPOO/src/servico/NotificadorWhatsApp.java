@@ -1,9 +1,9 @@
 package servico;
 
-public class NotificadorWhatsApp {
+import model.Cliente;
 
-    public void enviarNotificacao(Pedido pedido) {
-        String cpfCliente = pedido.getCliente().getCpf(); // Usando CPF como proxy para o número
-        System.out.println("Enviando WhatsApp para o número associado ao CPF " + cpfCliente + ": Seu pedido foi confirmado!");
+public class NotificadorWhatsApp {
+    public void notificar(Cliente cliente) {
+        System.out.println("Enviando WhatsApp para " + cliente.getCpf() + ": Seu pedido foi confirmado!");
     }
 }

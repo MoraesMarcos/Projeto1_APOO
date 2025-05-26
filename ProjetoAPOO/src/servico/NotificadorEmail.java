@@ -1,9 +1,9 @@
 package servico;
 
-public class NotificadorEmail {
+import model.Cliente;
 
-    public void enviarNotificacao(Pedido pedido) {
-        String emailCliente = pedido.getCliente().getEmail();
-        System.out.printf("Enviando e-mail para %s: Seu pedido foi confirmado!", emailCliente);
+public class NotificadorEmail {
+    public void notificar(Cliente cliente) {
+        System.out.println("Enviando e-mail para " + cliente.getEmail() + ": Seu pedido foi confirmado!");
     }
 }

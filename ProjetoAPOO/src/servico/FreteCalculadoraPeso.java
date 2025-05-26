@@ -1,5 +1,7 @@
 package servico;
 
+import model.Pedido;
+
 public class FreteCalculadoraPeso {
 
     private static final double VALOR_POR_KG = 5.00;
