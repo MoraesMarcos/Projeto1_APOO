@@ -86,11 +86,15 @@ Geração em dois formatos:
 
    git clone https://github.com/MoraesMarcos/Projeto1_APOO
 
-2. Compile os arquivos:
+2. JDK24
+   
+   24 - stream gatherers
+   
+4. Compile os arquivos:
    
     src/**/*.java
 
-3. Execute o programa:
+5. Execute o programa:
 
     src app.Main
 
