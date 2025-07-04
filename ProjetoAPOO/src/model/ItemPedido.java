@@ -17,11 +17,15 @@ public class ItemPedido {
         return quantidade;
     }
 
-    public double getSubtotal() {
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
+    }
+
+    public double calcularSubtotal() {
         return produto.getPreco() * quantidade;
     }
 
-    public double getPesoTotal() {
+    public double calcularPesoTotalItem() {
         return produto.getPeso() * quantidade;
     }
 }

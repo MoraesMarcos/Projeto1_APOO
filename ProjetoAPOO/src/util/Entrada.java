@@ -1,5 +1,6 @@
 package util;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Entrada {
@@ -7,16 +8,19 @@ public class Entrada {
 
     public static String lerString(String mensagem) {
         System.out.print(mensagem);
-        return scanner.nextLine().trim();
+        return scanner.nextLine();
     }
 
     public static int lerInt(String mensagem) {
         while (true) {
             try {
                 System.out.print(mensagem);
-                return Integer.parseInt(scanner.nextLine().trim());
-            } catch (NumberFormatException e) {
-                System.out.println("Entrada inválida. Digite um número inteiro.");
+                int valor = scanner.nextInt();
+                scanner.nextLine(); // Consumir a nova linha
+                return valor;
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Por favor, digite um número inteiro.");
+                scanner.nextLine(); // Consumir a entrada inválida
             }
         }
     }
@@ -25,10 +29,19 @@ public class Entrada {
         while (true) {
             try {
                 System.out.print(mensagem);
-                return Double.parseDouble(scanner.nextLine().trim());
-            } catch (NumberFormatException e) {
-                System.out.println("Entrada inválida. Digite um número decimal.");
+                double valor = scanner.nextDouble();
+                scanner.nextLine(); // Consumir a nova linha
+                return valor;
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Por favor, digite um número decimal.");
+                scanner.nextLine(); // Consumir a entrada inválida
             }
+        }
+    }
+
+    public static void fecharScanner() {
+        if (scanner != null) {
+            scanner.close();
         }
     }
 }

@@ -13,7 +13,6 @@ public class Cliente {
         this.telefone = telefone;
     }
 
-
     public String getNome() {
         return nome;
     }
@@ -26,5 +25,33 @@ public class Cliente {
         return email;
     }
 
-    public String getTelefone() { return telefone; }
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    @Override
+    public String toString() {
+        return "Cliente{" +
+                "nome='" + nome + '\'' +
+                ", cpf='" + cpf + '\'' +
+                ", email='" + email + '\'' +
+                ", telefone='" + telefone + '\'' +
+                '}';
+    }
 }

@@ -5,16 +5,41 @@ import java.util.List;
 
 public class Pedido {
     private Cliente cliente;
-    private List<ItemPedido> itens = new ArrayList<>();
-    private double frete = 0.0;
-    private double totalComFrete = 0.0;
+    private List<ItemPedido> itens;
+    private double frete;
 
     public Pedido(Cliente cliente) {
         this.cliente = cliente;
+        this.itens = new ArrayList<>();
+        this.frete = 0.0;
+    }
+
+    public Pedido(Cliente cliente, List<ItemPedido> itens, double frete) {
+        this.cliente = cliente;
+        this.itens = itens != null ? new ArrayList<>(itens) : new ArrayList<>();
+        this.frete = frete;
     }
 
     public void adicionarItem(Produto produto, int quantidade) {
-        itens.add(new ItemPedido(produto, quantidade));
+        if (produto != null && quantidade > 0) {
+            this.itens.add(new ItemPedido(produto, quantidade));
+        }
+    }
+
+    public double calcularTotalProdutos() {
+        return itens.stream()
+                .mapToDouble(ItemPedido::calcularSubtotal)
+                .sum();
+    }
+
+    public double calcularPesoTotal() {
+        return itens.stream()
+                .mapToDouble(ItemPedido::calcularPesoTotalItem)
+                .sum();
+    }
+
+    public double getTotalComFrete() {
+        return calcularTotalProdutos() + frete;
     }
 
     public Cliente getCliente() {
@@ -25,32 +50,19 @@ public class Pedido {
         return itens;
     }
 
-    public double calcularTotalProdutos() {
-        double total = 0;
-        for (ItemPedido item : itens) {
-            total += item.getSubtotal();
-        }
-        return total;
-    }
-
-    public double calcularPesoTotal() {
-        double pesoTotal = 0.0;
-        for (ItemPedido item : itens) {
-            pesoTotal += item.getProduto().getPeso() * item.getQuantidade();
-        }
-        return pesoTotal;
-    }
-
     public double getFrete() {
         return frete;
     }
 
-    public void setFrete(double frete) {
-        this.frete = frete;
-        this.totalComFrete = calcularTotalProdutos() + frete;
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
-    public double getTotalComFrete() {
-        return totalComFrete;
+    public void setItens(List<ItemPedido> itens) {
+        this.itens = itens != null ? new ArrayList<>(itens) : new ArrayList<>();
+    }
+
+    public void setFrete(double frete) {
+        this.frete = frete;
     }
 }

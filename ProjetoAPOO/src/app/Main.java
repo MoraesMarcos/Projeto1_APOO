@@ -1,9 +1,27 @@
 package app;
 
 import model.*;
-import servico.*;
-import relatorio.*;
+// Importações para relatórios (mantidas como estavam)
+import relatorio.RelatorioJSON;
+import relatorio.RelatorioTexto;
 import util.Entrada;
+
+// Importações para Abstract Factory (Frete)
+import servico.FabricaFrete;
+import servico.FabricaFretePeso;
+import servico.FabricaFreteDistancia;
+import servico.FreteCalculadora;
+
+// Importações para Abstract Factory (Notificação)
+import servico.FabricaNotificador;
+import servico.FabricaNotificadorEmail;
+import servico.FabricaNotificadorSMS;
+import servico.FabricaNotificadorWhatsApp;
+import servico.Notificador;
+
+// Importações para Builder (Pedido)
+import servico.PedidoBuilder;
+import servico.PedidoConcreteBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +59,7 @@ public class Main {
                 default -> System.out.println("Opção inválida.");
             }
         }
+        Entrada.fecharScanner(); // Garante que o scanner seja fechado ao sair.
     }
 
     // Menu de Clientes
@@ -83,8 +102,6 @@ public class Main {
         System.out.println("Cliente cadastrado com sucesso!");
     }
 
-
-
     // Menu de Produtos
     static void menuProdutos() {
         System.out.println("\n--- Cadastro de Produto ---");
@@ -110,7 +127,9 @@ public class Main {
             return;
         }
 
-        Pedido pedido = new Pedido(clientes.get(clienteIndex));
+        // 1. Inicia o Builder com o cliente
+        PedidoBuilder builder = new PedidoConcreteBuilder()
+                .comCliente(clientes.get(clienteIndex));
 
         boolean adicionando = true;
         while (adicionando) {
@@ -123,39 +142,53 @@ public class Main {
             }
             int qtd = Entrada.lerInt("Quantidade: ");
             if (qtd > 0) {
-                pedido.adicionarItem(produtos.get(produtoIndex), qtd);
+                builder.adicionarItem(produtos.get(produtoIndex), qtd);
             } else {
                 System.out.println("Quantidade inválida.");
             }
         }
 
-        if (pedido.getItens().isEmpty()) {
-            System.out.println("Pedido vazio. Cancelado.");
-            return;
-        }
+        // 2. Constrói um pedido temporário para calcular o frete (especialmente por peso)
+        // Isso é necessário porque o cálculo de frete por peso depende dos itens já adicionados.
+        Pedido pedidoTemporarioParaFrete = builder.build();
 
+        double frete = 0;
         System.out.println("\nEscolha o tipo de frete:");
         System.out.println("1 - Por peso total (R$ 5,00/kg)");
         System.out.println("2 - Por distância (R$ 0,50/km)");
         int tipoFrete = Entrada.lerInt("Opção: ");
-        double frete = 0;
 
+        FabricaFrete fabricaFrete;
+        FreteCalculadora calculadoraFrete;
+
+        // 3. Usa a Abstract Factory para criar a calculadora de frete
         if (tipoFrete == 1) {
-            frete = new FreteCalculadoraPeso().calcular(pedido);
+            fabricaFrete = new FabricaFretePeso();
+            calculadoraFrete = fabricaFrete.criarCalculadoraFrete();
+            frete = calculadoraFrete.calcular(pedidoTemporarioParaFrete); // Calcula com base no pedido (peso total)
         } else if (tipoFrete == 2) {
+            fabricaFrete = new FabricaFreteDistancia();
+            calculadoraFrete = fabricaFrete.criarCalculadoraFrete();
             double distancia = Entrada.lerDouble("Distância (km): ");
-            frete = new FreteCalculadoraDistancia().calcular(distancia);
+            frete = calculadoraFrete.calcular(distancia); // Calcula com base na distância
         } else {
             System.out.println("Opção de frete inválida. Valor zerado.");
         }
 
-        pedido.setFrete(frete);
-        pedidos.add(pedido);
+        // 4. Finaliza a construção do Pedido com o frete calculado
+        Pedido pedidoFinal = builder.comFrete(frete).build();
+
+        if (pedidoFinal.getItens().isEmpty()) {
+            System.out.println("Pedido vazio. Cancelado.");
+            return;
+        }
+
+        pedidos.add(pedidoFinal);
 
         System.out.println("\n✅ Pedido criado com sucesso!");
-        System.out.printf("Total produtos: R$ %.2f\n", pedido.calcularTotalProdutos());
-        System.out.printf("Frete: R$ %.2f\n", pedido.getFrete());
-        System.out.printf("Total com frete: R$ %.2f\n", pedido.getTotalComFrete());
+        System.out.printf("Total produtos: R$ %.2f\n", pedidoFinal.calcularTotalProdutos());
+        System.out.printf("Frete: R$ %.2f\n", pedidoFinal.getFrete());
+        System.out.printf("Total com frete: R$ %.2f\n", pedidoFinal.getTotalComFrete());
     }
 
     // Confirmar Pedido e Notificar
@@ -180,12 +213,21 @@ public class Main {
         System.out.println("3 - WhatsApp");
         int tipo = Entrada.lerInt("Escolha: ");
 
+        FabricaNotificador fabricaNotificador;
+        Notificador notificador;
+
+        // Usa a Abstract Factory para criar o notificador
         switch (tipo) {
-            case 1 -> new NotificadorEmail().notificar(pedido.getCliente());
-            case 2 -> new NotificadorSMS().notificar(pedido.getCliente());
-            case 3 -> new NotificadorWhatsApp().notificar(pedido.getCliente());
-            default -> System.out.println("Tipo inválido. Nenhuma notificação enviada.");
+            case 1 -> fabricaNotificador = new FabricaNotificadorEmail();
+            case 2 -> fabricaNotificador = new FabricaNotificadorSMS();
+            case 3 -> fabricaNotificador = new FabricaNotificadorWhatsApp();
+            default -> {
+                System.out.println("Tipo inválido. Nenhuma notificação enviada.");
+                return;
+            }
         }
+        notificador = fabricaNotificador.criarNotificador();
+        notificador.notificar(pedido.getCliente());
     }
 
     // Gerar Relatório
