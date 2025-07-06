@@ -1,15 +1,18 @@
 package model;
 
+import servico.FreteEscolhido;
+import servico.Notificador;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Pedido {
-    private Cliente cliente;
-    private List<ItemPedido> itens = new ArrayList<>();
-    private double frete = 0.0;
-    private double totalComFrete = 0.0;
+    private final Cliente cliente;
+    private final List<ItemPedido> itens = new ArrayList<>();
+    private FreteEscolhido freteEscolhido;
+    private Notificador notificador;
 
-    public Pedido(Cliente cliente) {
+    private Pedido(Cliente cliente) {
         this.cliente = cliente;
     }
 
@@ -17,40 +20,57 @@ public class Pedido {
         itens.add(new ItemPedido(produto, quantidade));
     }
 
-    public Cliente getCliente() {
-        return cliente;
+    public double getTotal() {
+        return itens.stream().mapToDouble(ItemPedido::getTotal).sum();
     }
 
-    public List<ItemPedido> getItens() {
-        return itens;
+    public double getPesoTotal() {
+        return itens.stream().mapToDouble(ItemPedido::getPesoTotal).sum();
     }
 
-    public double calcularTotalProdutos() {
-        double total = 0;
-        for (ItemPedido item : itens) {
-            total += item.getSubtotal();
+    public double calcularFrete() {
+        return freteEscolhido != null ? freteEscolhido.calcularFrete(this) : 0;
+    }
+
+    public void setFrete(FreteEscolhido freteEscolhido) {
+        this.freteEscolhido = freteEscolhido;
+    }
+
+    public void setNotificador(Notificador notificador) {
+        this.notificador = notificador;
+    }
+
+    public void notificar() {
+        if (notificador != null) notificador.notificar(cliente);
+    }
+
+    public Cliente getCliente() { return cliente; }
+    public List<ItemPedido> getItens() { return itens; }
+
+    public static class PedidoBuilder {
+        private final Pedido pedido;
+
+        public PedidoBuilder(Cliente cliente) {
+            pedido = new Pedido(cliente);
         }
-        return total;
-    }
 
-    public double calcularPesoTotal() {
-        double pesoTotal = 0.0;
-        for (ItemPedido item : itens) {
-            pesoTotal += item.getProduto().getPeso() * item.getQuantidade();
+        public PedidoBuilder adicionarItem(Produto produto, int quantidade) {
+            pedido.adicionarItem(produto, quantidade);
+            return this;
         }
-        return pesoTotal;
-    }
 
-    public double getFrete() {
-        return frete;
-    }
+        public PedidoBuilder setFrete(FreteEscolhido freteEscolhido) {
+            pedido.setFrete(freteEscolhido);
+            return this;
+        }
 
-    public void setFrete(double frete) {
-        this.frete = frete;
-        this.totalComFrete = calcularTotalProdutos() + frete;
-    }
+        public PedidoBuilder setNotificador(Notificador notificador) {
+            pedido.setNotificador(notificador);
+            return this;
+        }
 
-    public double getTotalComFrete() {
-        return totalComFrete;
+        public Pedido build() {
+            return pedido;
+        }
     }
 }

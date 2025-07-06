@@ -1,24 +1,16 @@
 package relatorio;
 
 import model.Pedido;
-import model.ItemPedido;
 
 public class RelatorioTexto {
-    public String gerar(Pedido pedido) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Cliente: ").append(pedido.getCliente().getNome()).append("\nProdutos:\n");
-        for (ItemPedido item : pedido.getItens()) {
-            sb.append("- ")
-                    .append(item.getProduto().getNome())
-                    .append(" (")
-                    .append(item.getQuantidade())
-                    .append("x) - R$ ")
-                    .append(String.format("%.2f", item.getSubtotal()))
-                    .append("\n");
-        }
-        sb.append("Total: R$ ").append(String.format("%.2f", pedido.calcularTotalProdutos())).append("\n");
-        sb.append("Frete: R$ ").append(String.format("%.2f", pedido.getFrete())).append("\n");
-        sb.append("Total com frete: R$ ").append(String.format("%.2f", pedido.getTotalComFrete())).append("\n");
-        return sb.toString();
+    public void gerar(Pedido pedido) {
+        System.out.println("Cliente: " + pedido.getCliente().getNome());
+        System.out.println("Produtos:");
+        pedido.getItens().forEach(item -> {
+            System.out.println("- " + item.getProduto().getNome() + " (" + item.getQuantidade() + "x) - R$ " + item.getProduto().getPreco());
+        });
+        System.out.println("Total: R$ " + pedido.getTotal());
+        System.out.println("Frete: R$ " + pedido.calcularFrete());
+        System.out.println("Total com frete: R$ " + (pedido.getTotal() + pedido.calcularFrete()));
     }
 }

@@ -1,8 +1,8 @@
 package model;
 
 public class ItemPedido {
-    private Produto produto;
-    private int quantidade;
+    private final Produto produto;
+    private final int quantidade;
 
     public ItemPedido(Produto produto, int quantidade) {
         this.produto = produto;
@@ -17,7 +17,7 @@ public class ItemPedido {
         return quantidade;
     }
 
-    public double getSubtotal() {
+    public double getTotal() {
         return produto.getPreco() * quantidade;
     }
 

@@ -1,10 +1,10 @@
 package model;
 
 public class Cliente {
-    private String nome;
-    private String cpf;
-    private String email;
-    private String telefone;
+    private final String nome;
+    private final String cpf;
+    private final String email;
+    private final String telefone;
 
     public Cliente(String nome, String cpf, String email, String telefone) {
         this.nome = nome;
@@ -13,18 +13,8 @@ public class Cliente {
         this.telefone = telefone;
     }
 
-
-    public String getNome() {
-        return nome;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
+    public String getNome() { return nome; }
+    public String getCpf() { return cpf; }
+    public String getEmail() { return email; }
     public String getTelefone() { return telefone; }
 }

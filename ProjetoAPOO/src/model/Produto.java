@@ -1,9 +1,9 @@
 package model;
 
 public class Produto {
-    private String nome;
-    private double preco;
-    private double peso; // em kg
+    private final String nome;
+    private final double preco;
+    private final double peso;
 
     public Produto(String nome, double preco, double peso) {
         this.nome = nome;
@@ -11,15 +11,7 @@ public class Produto {
         this.peso = peso;
     }
 
-    public String getNome() {
-        return nome;
-    }
-
-    public double getPreco() {
-        return preco;
-    }
-
-    public double getPeso() {
-        return peso;
-    }
+    public String getNome() { return nome; }
+    public double getPreco() { return preco; }
+    public double getPeso() { return peso; }
 }
