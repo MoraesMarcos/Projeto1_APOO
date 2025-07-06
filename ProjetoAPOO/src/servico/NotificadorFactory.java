@@ -3,13 +3,13 @@ package servico;
 import java.util.Objects;
 
 public class NotificadorFactory {
-    public static INotificador criarNotificador(String tipo) {
+    public static Notificador criarNotificador(String tipo) {
         if (Objects.equals(tipo, "EMAIL")) {
-            return new NotificadorEmail();
+            return new NotificacaoEmail();
         } else if (Objects.equals(tipo, "SMS")) {
-            return new NotificadorSMS();
+            return new NotificacaoSMS();
         } else if (Objects.equals(tipo, "WHATSAPP")) {
-            return new NotificadorWhatsApp();
+            return new NotificacaoWhatsApp();
         } else {
             throw new IllegalArgumentException("Tipo de notificador inválido: " + tipo);
         }
