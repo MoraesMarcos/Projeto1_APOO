@@ -1,9 +1,6 @@
 # 🛒 Sistema de Pedidos com Simulação de Notificações
 
-**Alunos:** Marcos Vinicius e Welligton Vinicius
-
-**Professor:** Delano Helio
-
+Este projeto, desenvolvido por Marcos Vinicius e Welligton Vinicius, sob a orientação do Professor Delano Helio, é um sistema de pedidos para uma loja virtual.
             
 ## *Projeto APOO sem Padrões de projeto*
 
@@ -106,9 +103,9 @@ Geração em dois formatos:
     src app.Main
 
 
-# *Projeto APOO com Padrões de projeto*
+# *🏗️ Projeto APOO com Padrões de Projeto*
 
-# 📄 Documentação do Sistema de Pedidos — APOO
+Esta seção detalha a versão aprimorada do sistema, que incorpora padrões de projeto para uma arquitetura mais modular, flexível e manutenível.
 
 ## 🧩 Visão Geral
 
@@ -176,8 +173,6 @@ Representa um pedido feito por um cliente.
 double calcularFrete(Pedido pedido);
 ```
 
-## 🚚 Frete (Strategy + Factory)
-
 ### Implementações:
 - `FretePeso`: frete por peso total do pedido  
 - `FreteDistancia`: frete por distância informada
@@ -194,8 +189,6 @@ double calcularFrete(Pedido pedido);
 ```java
 void notificar(Cliente cliente);
 ```
-
-## 📢 Notificações (Strategy + Factory + Decorator)
 
 ### Implementações:
 - `NotificacaoEmail`
@@ -215,8 +208,6 @@ void notificar(Cliente cliente);
 ### Classes:
 - `RelatorioTexto`: imprime o relatório em texto
 - `RelatorioJSON`: imprime o relatório em JSON
-
-> 💡 **Sugestão**: aplicar `RelatorioStrategy` para seguir o padrão Strategy.
 
 ---
 
@@ -252,6 +243,3 @@ Salva e carrega listas de objetos em arquivos binários usando serialização.
 | `Factory Method`         | `FactoryNotificador`, `FactoryFrete*`              |
 | `Decorator`              | `NotificadorComLog`                                |
 | `Singleton`              | `Entrada`                                          |
-| *(Sugerido)* `State`     | Controle de status do `Pedido`                     |
-| *(Sugerido)* `Strategy`  | `RelatorioStrategy` para geração de relatórios     |
-| *(Sugerido)* `Facade`    | `PedidoService` para isolar lógica de negócio      |
