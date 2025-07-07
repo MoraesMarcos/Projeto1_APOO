@@ -1,5 +1,12 @@
 # 🛒 Sistema de Pedidos com Simulação de Notificações
 
+**Alunos:** Marcos Vinicius e Welligton Vinicius
+
+**Professor:** Delano Helio
+
+            
+## *Projeto APOO sem Padrões de projeto*
+
 Este projeto é um sistema simples de pedidos para uma loja virtual, desenvolvido em **Java puro**, com foco em **orientação a objetos**, menus via terminal e **simulação de notificações e relatórios**.
 
 ---
@@ -98,3 +105,153 @@ Geração em dois formatos:
 
     src app.Main
 
+
+# *Projeto APOO com Padrões de projeto*
+
+# 📄 Documentação do Sistema de Pedidos — APOO
+
+## 🧩 Visão Geral
+
+Este sistema simula uma loja virtual com funcionalidades de **cadastro de clientes e produtos**, **criação de pedidos**, **escolha de frete e notificação**, além da **geração de relatórios**. O projeto aplica diversos **padrões de projeto** da Programação Orientada a Objetos para promover modularidade, coesão e reutilização de código.
+
+---
+
+## 🗂️ Estrutura de Pacotes
+
+```plaintext
+app/           → Classe principal (Main)
+model/         → Entidades do sistema (Cliente, Produto, Pedido, etc.)
+servico/       → Interfaces e implementações para frete e notificações
+relatorio/     → Geração de relatórios (Texto e JSON)
+util/          → Utilitários de entrada de dados e persistência
+
+```
+## 👥 Classes Principais
+
+### `Cliente`
+Representa um cliente da loja.
+
+- **Atributos**: `nome`, `cpf`, `email`, `telefone`
+- **Imutável** (atributos `final`)
+- **Métodos**: getters
+
+---
+
+### `Produto`
+Representa um produto disponível.
+
+- **Atributos**: `nome`, `preco`, `peso`
+- **Imutável**
+- **Métodos**: getters
+
+---
+
+### `ItemPedido`
+Composição entre `Pedido` e `Produto`.
+
+- **Atributos**: `produto`, `quantidade`
+- **Métodos**:
+  - `getTotal()`
+  - `getPesoTotal()`
+
+---
+
+### `Pedido`
+Representa um pedido feito por um cliente.
+
+- **Atributos**: `cliente`, lista de `ItemPedido`, `freteEscolhido`, `notificador`
+- **Métodos**:
+  - `adicionarItem(produto, quantidade)`
+  - `calcularFrete()`
+  - `notificar()`
+  - Getters
+- **Contém** classe interna `PedidoBuilder` (**Padrão Builder**)
+
+---
+
+## 🚚 Frete (Strategy + Factory)
+
+### Interface `FreteEscolhido`
+```java
+double calcularFrete(Pedido pedido);
+```
+
+## 🚚 Frete (Strategy + Factory)
+
+### Implementações:
+- `FretePeso`: frete por peso total do pedido  
+- `FreteDistancia`: frete por distância informada
+
+### Fábricas:
+- `FactoryFretePeso`
+- `FactoryFreteDistancia`
+
+---
+
+## 📢 Notificações (Strategy + Factory + Decorator)
+
+### Interface `Notificador`
+```java
+void notificar(Cliente cliente);
+```
+
+## 📢 Notificações (Strategy + Factory + Decorator)
+
+### Implementações:
+- `NotificacaoEmail`
+- `NotificacaoSMS`
+- `NotificacaoWhatsApp`
+
+### Fábrica:
+- `FactoryNotificador`
+
+### Decorator:
+- `NotificadorComLog`: adiciona logs à notificação
+
+---
+
+## 📄 Relatórios (Sugestão: Strategy)
+
+### Classes:
+- `RelatorioTexto`: imprime o relatório em texto
+- `RelatorioJSON`: imprime o relatório em JSON
+
+> 💡 **Sugestão**: aplicar `RelatorioStrategy` para seguir o padrão Strategy.
+
+---
+
+## 🔧 Utilitários
+
+### `Entrada` (Singleton)
+Facilita entrada de dados do usuário via console (`int`, `texto`, `double`).
+
+### `Persistencia`
+Salva e carrega listas de objetos em arquivos binários usando serialização.
+
+---
+
+## ▶️ Fluxo Principal (`Main`)
+
+1. Exibe menu com opções: cadastrar cliente, produto ou criar pedido.
+2. Ao criar pedido:
+   - Seleciona cliente e produto
+   - Informa quantidade
+   - Escolhe tipo de frete e notificação
+   - Gera relatório (opcional)
+   - Notifica cliente
+   - Adiciona pedido à lista
+
+---
+
+## 🧠 Padrões de Projeto Aplicados
+
+| **Padrão**               | **Local de Aplicação**                             |
+|--------------------------|----------------------------------------------------|
+| `Builder`                | `PedidoBuilder`                                    |
+| `Strategy`               | `FreteEscolhido`, `Notificador`                    |
+| `Factory Method`         | `FactoryNotificador`, `FactoryFrete*`              |
+| `Decorator`              | `NotificadorComLog`                                |
+| `Singleton`              | `Entrada`                                          |
+| *(Sugerido)* `State`     | Controle de status do `Pedido`                     |
+| *(Sugerido)* `Strategy`  | `RelatorioStrategy` para geração de relatórios     |
+| *(Sugerido)* `Facade`    | `PedidoService` para isolar lógica de negócio      |
