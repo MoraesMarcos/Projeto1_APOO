@@ -102,7 +102,7 @@ Geração em dois formatos:
 
     src app.Main
 
-
+---
 # *🏗️ Projeto APOO com Padrões de Projeto*
 
 Esta seção detalha a versão aprimorada do sistema, que incorpora padrões de projeto para uma arquitetura mais modular, flexível e manutenível.
