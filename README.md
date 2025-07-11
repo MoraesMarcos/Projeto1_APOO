@@ -90,9 +90,9 @@ Geração em dois formatos:
 
    git clone https://github.com/MoraesMarcos/Projeto1_APOO
 
-2. JDK24
-   
-   24 - stream gatherers
+2. JDK21
+
+   openjdk-24 (oracle OpenJDK 21.0.5)
    
 4. Compile os arquivos:
    
