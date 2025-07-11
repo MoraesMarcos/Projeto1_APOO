@@ -29,7 +29,7 @@ Criar um sistema que permita:
 
 src/
 
-├── app/ # Classe principal (Main.java)
+├── app/ # Classe principal (app.Main.java)
 
 ├── model/ # Entidades: Cliente, Produto, Pedido, ItemPedido
 
@@ -96,5 +96,5 @@ Geração em dois formatos:
 
 5. Execute o programa:
 
-    src app.Main
+    src app.app.Main
 
